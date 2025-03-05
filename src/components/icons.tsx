@@ -76,6 +76,7 @@ export const Icons = {
   symptom: Activity,
   drug: Pill,
   heart: Heart,
+  image: Image,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden='true'

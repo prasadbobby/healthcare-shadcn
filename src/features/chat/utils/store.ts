@@ -7,6 +7,11 @@ export type Message = {
   content: string;
   role: 'user' | 'assistant';
   createdAt: Date;
+  metadata?: {
+    imageUrl?: string;
+    imageKey?: string;
+    [key: string]: any;
+  };
 };
 
 export type ChatSession = {
@@ -66,13 +71,32 @@ export const useChatStore = create<ChatState>()(
         set({ activeSessionId: id, activeSession: session });
       },
       
-      addMessage: (sessionId, messageData) => {
+      addMessage: (sessionId: string, messageData: Omit<Message, 'id' | 'createdAt'>) => {
         const newMessage: Message = {
           id: Date.now().toString(),
           content: messageData.content,
           role: messageData.role,
-          createdAt: new Date()
+          createdAt: new Date(),
+          metadata: messageData.metadata
         };
+        
+        // If there's an image URL in metadata, store it in session storage to persist it
+        if (messageData.metadata?.imageUrl) {
+          // Create a key for this image
+          const imageKey = `chat-image-${newMessage.id}`;
+          try {
+            sessionStorage.setItem(imageKey, messageData.metadata.imageUrl);
+            
+            // Update metadata to use the key instead of the direct URL
+            newMessage.metadata = {
+              ...messageData.metadata,
+              imageKey
+            };
+          } catch (error) {
+            console.error("Failed to store image in session storage:", error);
+            // Keep the original imageUrl if session storage fails
+          }
+        }
         
         set((state) => {
           const updatedSessions = state.sessions.map(session => {

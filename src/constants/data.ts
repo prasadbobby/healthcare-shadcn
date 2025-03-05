@@ -50,6 +50,12 @@ export const navItems: NavItem[] = [
         url: '/dashboard/chat/drug',
         icon: 'drug',
         shortcut: ['d', 'i']
+      },
+      {
+        title: 'Image Analysis',
+        url: '/dashboard/image-analysis',
+        icon: 'image',
+        shortcut: ['i', 'a']
       }
     ]
   },
@@ -62,7 +68,6 @@ export const navItems: NavItem[] = [
     items: [] // No child items
   }
 ];
-
 // Mock data for recent healthcare sessions
 export interface HealthSession {
   id: number;

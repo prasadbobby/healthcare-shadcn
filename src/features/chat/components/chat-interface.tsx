@@ -101,6 +101,35 @@ export default function ChatInterface({ type, sessionId }: ChatInterfaceProps) {
     initializeSession();
   }, [type, sessionId, sessions, setActiveSessionId, createSession, router]);
   
+
+  useEffect(() => {
+    if (activeSession && activeSession.messages.length === 0 && activeSessionId) {
+      // Add appropriate welcome message based on type
+      let welcomeMessage = '';
+      switch (type) {
+        case 'clinical':
+          welcomeMessage = 'Welcome to Clinical Case Analysis! Describe a clinical case or patient scenario for analysis.';
+          break;
+        case 'literature':
+          welcomeMessage = 'Welcome to Medical Literature Review! Ask about recent medical research or specific conditions.';
+          break;
+        case 'symptom':
+          welcomeMessage = 'Welcome to Symptom Analysis! Describe symptoms for potential causes and recommendations.';
+          break;
+        case 'drug':
+          welcomeMessage = 'Welcome to Drug Interaction Analysis! Enter medications to check for potential interactions.';
+          break;
+        default:
+          welcomeMessage = 'Welcome! How can I assist you today?';
+      }
+      
+      addMessage(activeSessionId, {
+        content: welcomeMessage,
+        role: 'assistant'
+      });
+    }
+  }, [activeSession, activeSessionId, addMessage, type]);
+
   // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -244,69 +273,76 @@ export default function ChatInterface({ type, sessionId }: ChatInterfaceProps) {
         </CardHeader>
         
         <ScrollArea className="flex-1 p-4">
-          <div className="space-y-4">
-            {!activeSession || activeSession?.messages.length === 0 ? (
-              <div className="flex h-full items-center justify-center py-8">
-                <div className="text-center">
-                  <p className="text-lg font-medium">Welcome to {getChatTitle()}</p>
-                  <p className="text-muted-foreground">Start a conversation to get AI-powered healthcare insights</p>
-                </div>
+  <div className="space-y-4">
+    {activeSession?.messages.map((msg: Message) => (
+      <div 
+        key={msg.id} 
+        className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+      >
+        <div 
+          className={`flex max-w-[80%] items-start space-x-2 rounded-lg p-4
+            ${msg.role === 'user' 
+              ? 'bg-primary text-primary-foreground' 
+              : 'bg-muted'}`}
+        >
+          {msg.role === 'assistant' && (
+            <Avatar className="h-8 w-8">
+              <AvatarFallback>{getChatIcon()}</AvatarFallback>
+            </Avatar>
+          )}
+          <div className="space-y-1">
+            {/* Handle both direct imageUrl and stored imageKey */}
+            {(msg.metadata?.imageUrl || msg.metadata?.imageKey) && (
+              <div className="mb-2 overflow-hidden rounded-md border">
+                <img 
+                  src={msg.metadata?.imageUrl || (msg.metadata?.imageKey ? sessionStorage.getItem(msg.metadata.imageKey) : '')} 
+                  alt="Uploaded image" 
+                  className="h-auto max-h-60 w-full object-contain" 
+                />
               </div>
-            ) : (
-              activeSession?.messages.map((msg: Message) => (
-                <div 
-                  key={msg.id} 
-                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div 
-                    className={`flex max-w-[80%] items-start space-x-2 rounded-lg p-4
-                      ${msg.role === 'user' 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'bg-muted'}`}
-                  >
-                    {msg.role === 'assistant' && (
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback>{getChatIcon()}</AvatarFallback>
-                      </Avatar>
-                    )}
-                    <div className="space-y-1">
-                      <div className="break-words">{msg.content}</div>
-                      <div className="text-xs opacity-50">
-                        {format(new Date(msg.createdAt), 'h:mm a')}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))
             )}
-            <div ref={messagesEndRef} />
+            <div className="break-words">{msg.content}</div>
+            <div className="text-xs opacity-50">
+              {format(new Date(msg.createdAt), 'h:mm a')}
+            </div>
           </div>
-        </ScrollArea>
+        </div>
+      </div>
+    ))}
+    <div ref={messagesEndRef} />
+  </div>
+</ScrollArea>
         
         <CardFooter className="border-t p-4">
-          <form onSubmit={handleSubmit} className="flex w-full space-x-2">
-            <Textarea
-              ref={textareaRef}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={`Enter your ${type} query...`}
-              className="flex-1 min-h-10 resize-none"
-              disabled={isLoading || !activeSessionId}
-            />
-            <Button 
-              type="submit" 
-              disabled={!message.trim() || isLoading || !activeSessionId}
-              className="shrink-0"
-            >
-              {isLoading ? (
-                <div className="animate-spin">⟳</div>
-              ) : (
-                <ArrowUp className="h-4 w-4" />
-              )}
-              <span className="sr-only">Send</span>
-            </Button>
-          </form>
+        <form onSubmit={handleSubmit} className="flex w-full space-x-2">
+  <Textarea
+    ref={textareaRef}
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    onKeyDown={handleKeyDown}
+    placeholder={`Enter your ${type} query...`}
+    className="flex-1 min-h-10 resize-none"
+    disabled={isLoading || !activeSessionId}
+  />
+  
+  {/* <MicButton 
+    onSpeechRecognized={(text) => setMessage(text)}
+    disabled={isLoading || !activeSessionId}
+  /> */}
+  
+  <Button 
+    type="submit" 
+    disabled={!message.trim() || isLoading || !activeSessionId}
+    className="shrink-0"
+  >
+    {isLoading ? (
+      <div className="animate-spin">⟳</div>
+    ) : (
+      <ArrowUp className="h-4 w-4" />
+    )}
+    <span className="sr-only">Send</span>
+  </Button>
+</form>
         </CardFooter>
       </Card>
     </div>

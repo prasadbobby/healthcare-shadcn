@@ -48,8 +48,8 @@ embedding_lock = threading.RLock()  # For thread-safe embeddings access
 data_lock = threading.RLock()  # For thread-safe data access
 
 # Environment variables
-GEMINI_API_KEY =  "AIzaSyCcRxsIv0GyiRl3NtPvr1o8LdfoeDUn_HE"
-HF_API_KEY = "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"
+GEMINI_API_KEY =  ""
+HF_API_KEY = ""
 MODEL_NAME = "gemini-1.5-flash"
 MODEL = None
 

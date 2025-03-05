@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediAssist AI - Advanced Medical Decision Support</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c6ad5;
+            --primary-dark: #1d4b9c;
+            --primary-light: #e8f0fe;
+            --secondary: #24b68f;
+            --secondary-dark: #17856a;
+            --secondary-light: #e6f7f4;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --white: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --body-bg: #f5f7fb;
+            --border-radius: 0.75rem;
+            --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            --transition: all 0.2s ease-in-out;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--body-bg);
+            color: var(--gray-800);
+            line-height: 1.6;
+            padding-bottom: 3rem;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 1rem 0;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--white) !important;
+        }
+        
+        .navbar-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            color: var(--white);
+            font-weight: 300;
+        }
+        
+        .main-container {
+            margin-top: 2rem;
+        }
+        
+        .card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.25rem 1.5rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .nav-tabs {
+            border-bottom: none;
+            margin-bottom: 1rem;
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1.25rem;
+            margin-right: 0.5rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            background-color: var(--gray-100);
+            transition: var(--transition);
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 10px rgba(44, 106, 213, 0.2);
+        }
+        
+        .nav-tabs .nav-link:hover:not(.active) {
+            background-color: var(--gray-200);
+        }
+        
+        .tab-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--gray-700);
+        }
+        
+        .form-control, .form-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(44, 106, 213, 0.25);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 4px 10px rgba(44, 106, 213, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            box-shadow: 0 6px 15px rgba(44, 106, 213, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            box-shadow: 0 4px 10px rgba(36, 182, 143, 0.2);
+        }
+        
+        .btn-success:hover {
+            background-color: var(--secondary-dark);
+            border-color: var(--secondary-dark);
+            box-shadow: 0 6px 15px rgba(36, 182, 143, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .response-container {
+            background-color: var(--gray-100);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: var(--transition);
+            min-height: 300px;
+            position: relative;
+        }
+        
+        .response-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--gray-300);
+        }
+        
+        .response-heading h3 {
+            margin-bottom: 0;
+            font-size: 1.3rem;
+        }
+        
+        #text-response, #image-response {
+            line-height: 1.8;
+        }
+        
+        #text-response h2, #image-response h2 {
+            color: var(--primary);
+            border-bottom: 1px solid var(--gray-300);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        #text-response h2:first-child, #image-response h2:first-child {
+            margin-top: 0.5rem;
+        }
+        
+        #text-response ul, #text-response ol, #image-response ul, #image-response ol {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        #text-response ul li, #image-response ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        #text-response ol li, #image-response ol li {
+            margin-bottom: 0.5rem;
+        }
+        
+        #text-response p, #image-response p {
+            margin-bottom: 1rem;
+        }
+        
+        #text-response strong, #image-response strong {
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            opacity: 0.7;
+        }
+        
+        .loading-spinner .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .alert {
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .timing {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            text-align: right;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+        
+        .actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+        
+        .preview-container {
+            max-width: 100%;
+            max-height: 300px;
+            margin: 1rem 0;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            display: none;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            background-color: var(--gray-200);
+        }
+        
+        #image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            display: block;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+        
+        .image-upload-label {
+            display: block;
+            padding: 1rem;
+            text-align: center;
+            background-color: var(--gray-100);
+            border: 2px dashed var(--gray-400);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .image-upload-label:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+        
+        .image-upload-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .selected-file {
+            padding: 0.5rem 0.75rem;
+            margin-top: 0.5rem;
+            background-color: var(--light);
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .file-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+        
+        .remove-file {
+            color: var(--danger);
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+        
+        .footer {
+            background-color: var(--gray-900);
+            color: var(--gray-300);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer p {
+            margin-bottom: 0;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+        }
+        
+        .emoji {
+            display: inline-block;
+            margin-right: 0.25rem;
+            font-size: 1.3em;
+            vertical-align: middle;
+        }
+        
+        /* Pulse animation for loading state */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        
+        /* Toggle switch for dark/light mode (cosmetic only in this version) */
+        .form-switch {
+            padding-left: 2.5em;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .tile-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tile-option {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--white);
+        }
+        
+        .tile-option:hover {
+            background-color: var(--gray-100);
+        }
+        
+        .tile-option.selected {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px var(--primary);
+        }
+        
+        .tile-option i, .tile-option .emoji {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            margin: 0 auto 0.5rem auto;
+        }
+        
+        .tile-option .title {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        
+        .tile-option .description {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            display: block;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-400);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-500);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.4rem;
+            }
+            
+            .card-body {
+                padding: 1.25rem;
+            }
+            
+            .nav-tabs .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .actions-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .actions-row > div, .actions-row > button {
+                width: 100%;
+            }
+            
+            .tile-selector {
+                flex-direction: column;
+            }
+            
+            .tile-option {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-heartbeat me-2"></i> MediAssist AI
+            </a>
+            <span class="navbar-subtitle d-none d-sm-inline-block">Advanced Medical Decision Support System</span>
+        </div>
+    </nav>
+    
+    <div class="container main-container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-robot text-primary me-2"></i> 
+                            AI Medical Assistant
+                        </h4>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="themeSwitch">
+                            <label class="form-check-label" for="themeSwitch">
+                                <i class="fas fa-moon"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="text-tab" data-bs-toggle="tab" data-bs-target="#text-query-content" type="button" role="tab">
+                                    <i class="fas fa-file-medical-alt me-2"></i> Text Query
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="image-tab" data-bs-toggle="tab" data-bs-target="#image-analysis-content" type="button" role="tab">
+                                    <i class="fas fa-x-ray me-2"></i> Image Analysis
+                                </button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content pt-3" id="myTabContent">
+                            <!-- Text Query Tab -->
+                            <div class="tab-pane fade show active" id="text-query-content" role="tabpanel" aria-labelledby="text-tab">
+                                <div class="query-container">
+                                    <div class="mb-4">
+                                        <h5 class="mb-3">Select Query Type</h5>
+                                        <div class="tile-selector">
+                                            <div class="tile-option selected" data-value="clinical">
+                                                <i class="fas fa-user-md text-primary"></i>
+                                                <span class="title">Clinical Case</span>
+                                                <span class="description">Analyze patient cases and treatment paths</span>
+                                            </div>
+                                            <div class="tile-option" data-value="literature">
+                                                <i class="fas fa-book-medical text-info"></i>
+                                                <span class="title">Medical Literature</span>
+                                                <span class="description">Research findings and clinical studies</span>
+                                            </div>
+                                            <div class="tile-option" data-value="symptom">
+                                                <i class="fas fa-stethoscope text-warning"></i>
+                                                <span class="title">Symptom Analysis</span>
+                                                <span class="description">Evaluate symptoms and diagnostic paths</span>
+                                            </div>
+                                            <div class="tile-option" data-value="drug">
+                                                <i class="fas fa-pills text-danger"></i>
+                                                <span class="title">Drug Interactions</span>
+                                                <span class="description">Check medication interactions and risks</span>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="query-type" value="clinical">
+                                    </div>
+                                    
+                                    <div class="actions-row">
+                                        <div>
+                                            <h5>
+                                                <i class="fas fa-keyboard text-primary me-2"></i>
+                                                Enter Your Query
+                                            </h5>
+                                        </div>
+                                        <button id="refresh-embeddings" class="btn btn-success" title="Refresh embeddings for the selected category">
+                                            <i class="fas fa-sync-alt me-2"></i> Refresh Embeddings
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <textarea id="query-text" class="form-control" rows="4" placeholder="Describe your medical query in detail..."></textarea>
+                                        <div class="form-text">Be specific and include relevant medical details for better results.</div>
+                                    </div>
+                                    
+                                    <div class="mb-4 text-center">
+                                        <button id="submit-query" class="btn btn-primary">
+                                            <i class="fas fa-search me-2"></i> Submit Query
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="response-container">
+                                        <div class="response-heading">
+                                            <h3>
+                                                <i class="fas fa-comment-medical text-primary me-2"></i>
+                                                Response
+                                            </h3>
+                                            <span class="badge bg-secondary">AI Generated</span>
+                                        </div>
+                                        <div id="text-response" class="py-2">
+                                            <div class="text-center text-muted py-5">
+                                                <i class="fas fa-robot fa-3x mb-3"></i>
+                                                <p>Submit a query to see the AI response here.</p>
+                                            </div>
+                                        </div>
+                                        <div id="text-timing" class="timing"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Image Analysis Tab -->
+                            <div class="tab-pane fade" id="image-analysis-content" role="tabpanel" aria-labelledby="image-tab">
+                                <div class="image-container">
+                                    <div class="mb-4">
+                                        <h5>
+                                            <i class="fas fa-upload text-primary me-2"></i>
+                                            Upload Medical Image
+                                        </h5>
+                                        
+                                        <div class="image-upload-container">
+                                            <label for="image-upload" class="image-upload-label">
+                                                <div class="image-upload-icon">
+                                                    <i class="fas fa-file-medical"></i>
+                                                </div>
+                                                <div>Click to upload or drag and drop</div>
+                                                <div class="small text-muted">Supports: JPG, PNG, TIFF, BMP, DICOM</div>
+                                            </label>
+                                            <input type="file" id="image-upload" class="d-none" accept="image/*">
+                                            
+                                            <div id="selected-file-container" class="selected-file" style="display: none;">
+                                                <i class="fas fa-file-image text-primary me-2"></i>
+                                                <span id="selected-file-name" class="file-name">No file selected</span>
+                                                <span class="remove-file" title="Remove file">
+                                                    <i class="fas fa-times-circle"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="preview-container" id="preview-container">
+                                            <img id="image-preview" alt="Image preview">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h5>
+                                            <i class="fas fa-comment-dots text-primary me-2"></i>
+                                            Analysis Prompt
+                                        </h5>
+                                        <textarea id="image-prompt" class="form-control" rows="3" placeholder="Enter prompt for image analysis (e.g., 'Analyze this X-ray for abnormalities')..."></textarea>
+                                        <div class="form-text">Provide specific instructions about what you want the AI to focus on.</div>
+                                    </div>
+                                    
+                                    <div class="mb-4 text-center">
+                                        <button id="analyze-image" class="btn btn-primary">
+                                            <i class="fas fa-microscope me-2"></i> Analyze Image
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="response-container">
+                                        <div class="response-heading">
+                                            <h3>
+                                                <i class="fas fa-diagnoses text-primary me-2"></i>
+                                                Analysis Results
+                                            </h3>
+                                            <span class="badge bg-secondary">AI Generated</span>
+                                        </div>
+                                        <div id="image-response" class="py-2">
+                                            <div class="text-center text-muted py-5">
+                                                <i class="fas fa-x-ray fa-3x mb-3"></i>
+                                                <p>Upload an image and provide a prompt to see the analysis here.</p>
+                                            </div>
+                                        </div>
+                                        <div id="image-timing" class="timing"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>© 2025 MediAssist AI | Advanced Medical Decision Support System</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-info-circle me-1"></i> About</a></li>
+                        <li><a href="#"><i class="fas fa-shield-alt me-1"></i> Privacy</a></li>
+                        <li><a href="#"><i class="fas fa-question-circle me-1"></i> Help</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Document ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Bootstrap tabs
+            const triggerTabList = [].slice.call(document.querySelectorAll('#myTab button'));
+            triggerTabList.forEach(function(triggerEl) {
+                const tabTrigger = new bootstrap.Tab(triggerEl);
+                triggerEl.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    tabTrigger.show();
+                });
+            });
+            
+            // Tile selector functionality
+            document.querySelectorAll('.tile-option').forEach(tile => {
+                tile.addEventListener('click', function() {
+                    // Remove selected class from all tiles
+                    document.querySelectorAll('.tile-option').forEach(t => t.classList.remove('selected'));
+                    
+                    // Add selected class to clicked tile
+                    this.classList.add('selected');
+                    
+                    // Update hidden input with selected value
+                    document.getElementById('query-type').value = this.getAttribute('data-value');
+                });
+            });
+            
+            // Image upload preview
+            document.getElementById('image-upload').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    // Display file name
+                    document.getElementById('selected-file-name').textContent = file.name;
+                    document.getElementById('selected-file-container').style.display = 'flex';
+                    
+                    // Create preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('image-preview').src = e.target.result;
+                        document.getElementById('preview-container').style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    // Reset UI
+                    document.getElementById('selected-file-container').style.display = 'none';
+                    document.getElementById('preview-container').style.display = 'none';
+                }
+            });
+            
+            // Remove file button
+            document.querySelector('.remove-file').addEventListener('click', function() {
+                // Clear file input
+                document.getElementById('image-upload').value = '';
+                
+                // Reset UI
+                document.getElementById('selected-file-container').style.display = 'none';
+                document.getElementById('preview-container').style.display = 'none';
+            });
+            
+            // Enable drag and drop for image upload
+            const uploadLabel = document.querySelector('.image-upload-label');
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadLabel.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadLabel.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadLabel.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                uploadLabel.classList.add('border-primary');
+                uploadLabel.style.backgroundColor = 'var(--primary-light)';
+            }
+            
+            function unhighlight() {
+                uploadLabel.classList.remove('border-primary');
+                uploadLabel.style.backgroundColor = '';
+            }
+            
+            uploadLabel.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length) {
+                    document.getElementById('image-upload').files = files;
+                    // Trigger change event
+                    const event = new Event('change', { bubbles: true });
+                    document.getElementById('image-upload').dispatchEvent(event);
+                }
+            }
+            
+            // Text query functionality
+            document.getElementById('submit-query').addEventListener('click', async function() {
+                const queryType = document.getElementById('query-type').value;
+                const queryText = document.getElementById('query-text').value;
+                const responseDiv = document.getElementById('text-response');
+                const timingDiv = document.getElementById('text-timing');
+                const submitButton = document.getElementById('submit-query');
+                
+                if (!queryText.trim()) {
+                    responseDiv.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle me-2"></i>Please enter a query</div>';
+                    return;
+                }
+                
+                // Disable button and show loading
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...';
+                
+                responseDiv.innerHTML = `
+                    <div class="loading-spinner">
+                        <div class="spinner-border" role="status"></div>
+                        <div>Processing your query...</div>
+                    </div>
+                `;
+                timingDiv.innerHTML = '';
+                
+                try {
+                    const response = await fetch('/query', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            type: queryType,
+                            query: queryText
+                        }),
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        // Display the formatted response
+                        responseDiv.innerHTML = data.response;
+                        timingDiv.innerHTML = `<i class="fas fa-clock me-1"></i> Processing time: ${data.processing_time || 'N/A'}`;
+                    } else {
+                        responseDiv.innerHTML = `
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-circle me-2"></i> 
+                                ${data.response || 'An error occurred'}
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    responseDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-wifi-slash me-2"></i>
+                            Network error: ${error.message}
+                        </div>
+                    `;
+                } finally {
+                    // Re-enable button
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = '<i class="fas fa-search me-2"></i> Submit Query';
+                }
+            });
+            
+            // Refresh embeddings functionality
+            document.getElementById('refresh-embeddings').addEventListener('click', async function() {
+                const refreshButton = document.getElementById('refresh-embeddings');
+                const queryType = document.getElementById('query-type').value;
+                const responseDiv = document.getElementById('text-response');
+                
+                // Disable button and show loading
+                refreshButton.disabled = true;
+                const originalText = refreshButton.innerHTML;
+                refreshButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Refreshing...';
+                
+                responseDiv.innerHTML = `
+                    <div class="loading-spinner">
+                        <div class="spinner-border" role="status"></div>
+                        <div>Refreshing ${queryType} embeddings...</div>
+                        <div class="small text-muted mt-2">This may take a few moments.</div>
+                    </div>
+                `;
+                
+                try {
+                    const response = await fetch('/refresh-embeddings', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            category: queryType
+                        }),
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        responseDiv.innerHTML = `
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i> 
+                                ${data.message}
+                            </div>
+                        `;
+                        
+                        if (data.embedding_count) {
+                            responseDiv.innerHTML += `
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Generated ${data.embedding_count} embeddings in ${data.processing_time}.
+                                </div>
+                            `;
+                        }
+                    } else {
+                        responseDiv.innerHTML = `
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                Error: ${data.message || 'Failed to refresh embeddings'}
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    responseDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-wifi-slash me-2"></i>
+                            Network error: ${error.message}
+                        </div>
+                    `;
+                } finally {
+                    // Re-enable button
+                    refreshButton.disabled = false;
+                    refreshButton.innerHTML = originalText;
+                }
+            });
+            
+            // Image analysis functionality
+            document.getElementById('analyze-image').addEventListener('click', async function() {
+                const imageFile = document.getElementById('image-upload').files[0];
+                const prompt = document.getElementById('image-prompt').value;
+                const responseDiv = document.getElementById('image-response');
+                const timingDiv = document.getElementById('image-timing');
+                const analyzeButton = document.getElementById('analyze-image');
+                
+                if (!imageFile) {
+                    responseDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Please upload an image
+                        </div>
+                    `;
+                    return;
+                }
+                
+                if (!prompt.trim()) {
+                    responseDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Please enter an analysis prompt
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Disable button and show loading
+                analyzeButton.disabled = true;
+                analyzeButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Analyzing...';
+                
+                responseDiv.innerHTML = `
+                    <div class="loading-spinner">
+                        <div class="spinner-border" role="status"></div>
+                        <div>Analyzing image...</div>
+                        <div class="small text-muted mt-2">This may take up to a minute.</div>
+                    </div>
+                `;
+                timingDiv.innerHTML = '';
+                
+                try {
+                    const formData = new FormData();
+                    formData.append('image', imageFile);
+                    formData.append('prompt', prompt);
+                    
+                    const response = await fetch('/analyze-image', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        // Display the formatted response
+                        responseDiv.innerHTML = data.response;
+                        timingDiv.innerHTML = `<i class="fas fa-clock me-1"></i> Processing time: ${data.processing_time || 'N/A'}`;
+                    } else {
+                        responseDiv.innerHTML = `
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                ${data.response || 'An error occurred'}
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    responseDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-wifi-slash me-2"></i>
+                            Network error: ${error.message}
+                        </div>
+                    `;
+                } finally {
+                    // Re-enable button
+                    analyzeButton.disabled = false;
+                    analyzeButton.innerHTML = '<i class="fas fa-microscope me-2"></i> Analyze Image';
+                }
+            });
+            
+            // Theme switcher (cosmetic only)
+            document.getElementById('themeSwitch').addEventListener('change', function() {
+                document.body.classList.toggle('dark-mode');
+            });
+        });
+    </script>
+</body>
+</html>
